@@ -1,3 +1,3 @@
 # tcl-redis-server
 
-for learning tcl.
+learning tcl
