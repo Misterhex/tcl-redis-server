@@ -21,19 +21,35 @@ proc processCommand {chan} {
 
 		puts "received redis set command"
 
-		eval $line
+		set tokens [split $line " "]
 
-	} else if {[isStringGet $line]} { 
+		set key [lindex $tokens 1]
+
+		set globalKey ::$key
+
+		set tokens [lreplace $tokens 1 1 $globalKey]
+
+		set globalset [join $tokens " "]
+
+		eval $globalset
+
+	} elseif {[isStringGet $line]} { 
 
 		puts "received redis get command"
 	
 		set tokens [split $line " "]
 
-		puts "Tokens : $token"
-
 		set key [lindex $tokens 1]
 
-		puts "Key : $key"
+		if {[info exists ::$key]} {
+
+			puts $chan [set ::$key]
+
+		} else {
+
+			puts $chan "(nil)"
+
+		}
 
 	} else {
 
